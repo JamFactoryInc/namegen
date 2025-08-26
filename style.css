@@ -1,0 +1,38 @@
+:root {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #111;
+    color: #AAA;
+    font-size: 150%;
+}
+
+#config {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+
+.slidecontainer {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.slidecontainer * {
+    margin: 1em;
+}
+
+#gen {
+    position: relative;
+    display: block;
+    margin: auto;
+    font-size: 100%;
+    padding: 1em;
+}
+
+#names {
+    text-align: center;
+    margin-top: 3em;
+    letter-spacing: 2px;
+    text-transform: capitalize;
+}
