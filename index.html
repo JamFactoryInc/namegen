@@ -12,21 +12,31 @@
 </head>
 
 <body>
+    <div id="names"></div>
+    
     <div id="config">
+        <div>
+            <button id="gen" onclick="gen()">Generate</button>
+        </div>
+        <div class="slidecontainer">
+            <label for="">Starting with</label>
+            <input type="text" maxlength="5" id="firstLetter">
+        </div>
         <div class="slidecontainer">
             <label for="">Harshness</label>
-            <input onmousemove="changeHarshness(this)" type="range" min="0" max="10" value="5" class="slider" id="harshness">
+            <input oninput="changeHarshness(this)" type="range" min="0" max="16" value="5" class="slider" id="harshness">
             <p>5</p>
         </div>
         <div class="slidecontainer">
             <label for="">Length</label>
-            <input onmousemove="changeLength(this)" type="range" min="3" max="20" value="6" class="slider" id="length">
+            <input oninput="changeLength(this)" type="range" min="3" max="20" value="6" class="slider" id="length">
             <p>5</p>
         </div>
+
     </div>
 
-    <button id="gen" onclick="gen()">Generate</button>
-    <div id="names"></div>
+    
+    
 </body>
 
 </html>

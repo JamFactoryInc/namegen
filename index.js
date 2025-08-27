@@ -1,13 +1,13 @@
 //todo fix 3 vowel issue and try to do syllables
 
 const blends = {
-    // first index is if it is not preceeded by a vowel
+    // first index is if it is preceeded by a consonant
     // second index is if it is preceeded by a vowel
-    // third index is if it is the 2nd-to-last character
+    // third index is if it is one of the last 2 letters
     'a': ['qwrtpsdfghjklzxcvbnm', '', 'qwrtpsdfghjklzxcvbnm'],
     'b': ['rl', '', ''],
     'c': ['rklh', '', 'kh'],
-    'd': ['wrj', 'l', 'rl'],
+    'd': ['wrj', 'l', ''],
     'e': ['qwrtpsdfghjklzxcvbnm', '', 'qwrtpsdfghjklzxcvbnm'],
     'f': ['rjl', '', ''],
     'g': ['rlh', '', 'h'],
@@ -159,14 +159,15 @@ const digraphs = {
 
 const repeatableVowels = ['a', 'e', 'o', 'i', 'u']
 
-const vowels = 'aeiouy'
+const vowels = 'aeiou'
 
-const consonants = 'bcdfghjklmnpqrstvwxz'
+// we put 'y' here because it often makes the work unpronouncable as a solitary vowel
+const consonants = 'bcdfghjklmnpqrstvwxzy'
 
 const alphabet = vowels + consonants;
 
-// let lang = "eng"
-let lang = "norsk"
+let lang = "eng"
+// let lang = "norsk"
 
 function shuffle(array) {
 
@@ -204,7 +205,7 @@ function weightedRandom(letters, harshness) {
 
     for (i = 0; i < letters.length; i++)
         weights[i] = getWeight(letters[i], harshness) + (weights[i - 1] || 0);
-
+    
     var random = Math.random() * weights[weights.length - 1];
 
     for (i = 0; i < weights.length; i++)
@@ -240,30 +241,31 @@ function nameGen(harshness, length, startingLetter = "") {
         name = startingLetter
     }
 
-    let adjacentVowels = vowels.includes(startingLetter) ? 1 : 0
-    let adjacentConsonants = consonants.includes(startingLetter) ? 1 : 0
+    let adjacentVowels = vowels.includes(getLast(startingLetter)) ? 1 : 0
+    let adjacentConsonants = consonants.includes(getLast(startingLetter)) ? 1 : 0
 
     let prevprev = undefined
     let prevLetter = undefined
 
     // generate characters
-    for (let i = 1; i < length; i++) {
+    for (let i = Math.max(1, startingLetter.length); i < length; i++) {
 
+        let prevChar = getLast(name)
         let nextPool = ''
-            // if it's 2nd-to-last
+            // if one of the last 2 chars
         if (i + 2 >= length) {
-            nextPool = blends[getLast(name)][2]
+            nextPool = blends[prevChar][2]
         } else {
             // if the previous char is a vowel
-            if (vowels.includes(getLast(name)) && blends[getLast(name)][1]) {
-                nextPool = blends[getLast(name)][1]
+            if (vowels.includes(prevChar) && blends[prevChar][1]) {
+                nextPool = blends[prevChar][1]
             } else {
-                nextPool = blends[getLast(name)][0]
+                nextPool = blends[prevChar][0]
             }
         }
 
         // append default allowed vowels
-        nextPool += allowedVowels[getLast(name)]
+        nextPool += allowedVowels[prevChar]
 
         let nextPart = ''
 
@@ -277,6 +279,13 @@ function nameGen(harshness, length, startingLetter = "") {
             }
 
             if (prevLetter == nextPart) {
+                // completely disallow triple repeats
+                if (name.length >= 2) {
+                    if (name[name.length - 2] == prevLetter) {
+                        continue
+                    }
+                }
+
                 if (
                     (!repeatableVowels.includes(prevLetter) && vowels.includes(prevLetter)) ||
                     (name.length <= 1) ||
@@ -285,14 +294,14 @@ function nameGen(harshness, length, startingLetter = "") {
                     continue
                 }
             }
-            console.log(consonants.includes(nextPart), adjacentConsonants, maxAdjacentConsonants)
-            console.log(vowels.includes(nextPart), adjacentVowels, maxAdjacentVowels)
+            // console.log(consonants.includes(nextPart), adjacentConsonants, maxAdjacentConsonants)
+            // console.log(vowels.includes(nextPart), adjacentVowels, maxAdjacentVowels)
             if (consonants.includes(nextPart) && adjacentConsonants >= maxAdjacentConsonants) {
                 continue
             } else if (vowels.includes(nextPart) && adjacentVowels >= maxAdjacentVowels) {
                 continue
             }
-            console.log(nextPart)
+            // console.log(nextPart)
             break
         }
 
@@ -315,16 +324,19 @@ function nameGen(harshness, length, startingLetter = "") {
 
 $(document).ready(() => {
     $('.slider').each((_, e) => {
-        $(e).next().text($(e).val())
+        let el = $(e);
+        el.next().text(el.val())
     })
 })
 
 function changeHarshness(e) {
-    $(e).next().text($(e).val())
+    let el = $(e);
+    el.next().text(el.val())
 }
 
 function changeLength(e) {
-    $(e).next().text($(e).val())
+    let el = $(e);
+    el.next().text(el.val())
 }
 
 function gen() {
@@ -334,7 +346,16 @@ function gen() {
 
     $('#names').empty()
 
-    for (let i = 0; i < 10; i++) {
-        $('#names').append(`<p>${nameGen(harshness, length)}</p>`)
+    let startingLetter = $('#firstLetter').val()
+    if (!startingLetter) {
+        startingLetter = ""
+    }
+
+    for (let i = 0; i < 100; i++) {
+        nameGen(harshness, length, startingLetter.toLowerCase())
+    }
+
+    for (let i = 0; i < 1; i++) {
+        $('#names').append(`<p>${nameGen(harshness, length, startingLetter.toLowerCase())}</p>`)
     }
 }
