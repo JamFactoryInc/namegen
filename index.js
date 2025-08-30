@@ -1,7 +1,7 @@
 //todo fix 3 vowel issue and try to do syllables
 
 const VARIANT_DIFFERENTNESS = 1.0;
-const PRECOMPUTE_SIZE = 10;
+const PRECOMPUTE_SIZE = 20;
 
 function swap(arr, i1, i2) {
     let l = arr[i1];
@@ -23,7 +23,7 @@ function RNG(seed, variant = 0, precompute = true) {
     this.m = 0x80000000; // 2**31;
     this.a = 1103515245;
     this.c = 12345;
-    this.state = seed ? seed : Math.floor(Math.random() * (this.m - 1));
+    this.state = seed;
 
     if (precompute) {
         this.precomputed = []
@@ -44,9 +44,9 @@ function RNG(seed, variant = 0, precompute = true) {
 
             for (let i = 0; i + 1 < swapCount; i) {
                 let idx = indices[i++];
-                this.precomputed[idx] += tempRng.nextInt() % 6;
+                this.precomputed[idx] += tempRng.nextInt() % 13 + 1;
                 idx = indices[i++];
-                this.precomputed[idx] -= tempRng.nextInt() % 6;
+                this.precomputed[idx] -= tempRng.nextInt() % 13 + 1;
                 // let i1 = indices[i++];
                 // let i2 = indices[i++];
                 // swap(this.precomputed, i1, i2);
@@ -87,7 +87,8 @@ RNG.prototype.clone = function() {
 const vowels = 'aeiou'
 
 // we put 'y' here because it often makes the work unpronouncable as a solitary vowel
-const consonants = 'bcdfghjklmnpqrstvwxyz'
+// const consonants = 'bcdfghjklmnpqrstvwxyz'
+const consonants = 'nmrhkxcqbwptdgyfvszjl'
 
 const blends = {
     // first index is if it is the first letter
@@ -111,7 +112,7 @@ const blends = {
     'o': [consonants, consonants, '', consonants],
     'p': ['', 'rlh', '', 'h'],
     'q': ['', 'u', '', 'u'],
-    'r': ['', '', 'tpsdfghjklcvbnm', 'tpsdfghjklcvbnm'],
+    'r': ['', '', 'nmkcqbptdgfvsjl', 'nmkcqbptdgfvsjl'],
     's': ['', 'rtplcm', 'tpsklcm', 'tpskm'],
     't': ['', 'rh', 'tl', 'h'],
     'u': [consonants, consonants, '', consonants],
@@ -577,6 +578,7 @@ function generateVariants(seed, variant) {
         let rng = new RNG(seed, variant = variantGenerator.nextInt());
         let name = nameGen(harshness, length, startingLetter.toLowerCase(), rng);
         if (existing.includes(name) && i < 20) {
+            console.log(`trying again ${i}/20`)
             continue;
         }
         existing.push(name);
