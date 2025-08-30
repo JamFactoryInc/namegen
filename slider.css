@@ -1,0 +1,32 @@
+.slider {
+    -webkit-appearance: none;
+    background: #d3d3d3;
+    outline: none;
+    display: block;
+    background-color: #0000;
+    border-bottom: #222 dashed 0.2rem;
+    width: 100%;
+    max-height: 0.0rem;
+    padding: 0;
+}
+
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.25rem;
+    min-height: 1.25rem !important;
+    background: #ffebda;
+    cursor: pointer;
+    border: #222 solid 0.2rem;
+    border-radius: 0.5rem;
+}
+
+.slider::-moz-range-thumb {
+    width: 1.25rem;
+    min-height: 1.25rem !important;
+    background: #ffebda;
+    cursor: pointer;
+    border: #222 solid 0.2rem;
+    border-radius: 0.5rem;
+}

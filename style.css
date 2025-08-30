@@ -1,55 +1,152 @@
 body {
     margin: 0;
+    display: flexbox;
+}
+
+* {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #222;
 }
 
 :root {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #111;
     color: #AAA;
     font-size: 150%;
+    background-color: #ffebda;
 }
 
-#config {
+input[type=text], button {
+    outline: 0.2rem black solid;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #ffebda;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#display {
+    width: 100%;
+    display: flex;
+    outline: #222 0.2rem solid;
+    margin: 1rem 0;
+}
+
+#names, #variants {
+    text-align: center;
+    letter-spacing: 2px;
+    font-size: 2em;
+    width: auto;
+}
+
+#names {
+    width: 100%;
+}
+
+#names>* {
+    text-align: center;
+    margin: 0.3em;
+}
+
+#variants>* {
+    text-align: left;
+    margin: 0.3em;
+}
+
+#names.selected + #variants {
+    width: 40%;
     position: absolute;
-    
-    width: 100vw;
+    right: 0;
+}
+
+/* .name.selected {
+    text-decoration:underline;
+} */
+
+#names.selected .name:not(.selected) {
+    opacity: 0.25;
+}
+
+.name::after {
+    content: ' -';
+    color: #2224;
+    position: absolute;
+    padding: 0.1em 1em;
+    font-size: 0.8em;
+}
+
+.name.selected::after {
+    content: ' +';
+    color: #2224;
+    position: absolute;
+    padding: 0.1em 1em;
+    font-size: 0.8em;
+}
+
+.locked {
+    color: rgb(0, 119, 255);
+}
+
+#names:not(.selected) .name:hover, .name.selected:hover {
+    cursor: pointer;
+    text-decoration:underline;
+}
+
+#names:not(.selected) .name:hover::after {
+    content: ' + more like this...';
+    cursor: pointer;
+}
+
+#nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+#config {
     display: flex;
     bottom: 0;
     margin:0;
     padding: 0px;
-    flex-wrap: nowrap;
-    justify-content: space-evenly;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 10rem 10rem 10rem;
+    /* row-gap: 2rem; */
+    width: max-content;
+    margin: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
 }
 
-.slidecontainer {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content:center;
-    align-items: center;
+#config>* {
+    margin: 1rem;
+    padding: 0.5rem;
 }
 
-.slidecontainer * {
+/* .slidecontainer {
+    display: grid;
+    grid-template-columns: 10em 10em 10em;
+}
+
+.slidecontainer>* {
     margin: 1em;
-    width: 30%;
+    padding: 0.5rem;
 }
 
 .slidecontainer :first-child {
     text-align: right;
-}
+} */
 
-#gen {
+.gen {
     position: relative;
     display: block;
     margin: auto;
     font-size: 100%;
     padding: 1em;
-}
-
-#names {
-    text-align: center;
-    margin-top: 3em;
-    letter-spacing: 2px;
-    text-transform: capitalize;
-    font-size: 2em;
+    width: 5em;
 }
